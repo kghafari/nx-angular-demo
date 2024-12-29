@@ -50,12 +50,12 @@ jobs:
             echo "---" >> "./dist/nx-angular-demo/browser/404.html"
             cat "./dist/nx-angular-demo/browser/index.html" >> "./dist/nx-angular-demo/browser/404.html"
 
-    #   - name: Deploy to GitHub Pages
-    #     id: deployment
-    #     uses: actions/deploy-pages@v4
-      - name: Deploy
-        uses: JamesIves/github-pages-deploy-action@releases/v3
-        with:
-            GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-            BRANCH: main
-            FOLDER: dist/nx-angular-demo
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+      # - name: Deploy
+      #   uses: JamesIves/github-pages-deploy-action@releases/v3
+      #   with:
+      #       GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+      #       BRANCH: main
+      #       FOLDER: dist/nx-angular-demo

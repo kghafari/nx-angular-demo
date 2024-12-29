@@ -1,0 +1,74 @@
+<h2 class="title">Tasks</h2>
+
+<div class="add-container">
+  <form (ngSubmit)="addTask()">
+    <mat-form-field class="form-field-container">
+      <mat-label>Title</mat-label>
+      <input
+        matInput
+        [(ngModel)]="newTaskItem.name"
+        [ngModelOptions]="{ standalone: true }"
+      />
+      <button mat-icon-button matSuffix>
+        <mat-icon fontIcon="add"></mat-icon>
+      </button>
+    </mat-form-field>
+
+    <mat-form-field class="form-field-container">
+      <mat-label>Details</mat-label>
+      <textarea
+        matInput
+        [(ngModel)]="newTaskItem.details"
+        [ngModelOptions]="{ standalone: true }"
+      ></textarea>
+    </mat-form-field>
+  </form>
+</div>
+
+<div class="container">
+  <h5>To Do:</h5>
+  <div
+    cdkDropList
+    #todoTaskList="cdkDropList"
+    [cdkDropListData]="tasks"
+    [cdkDropListConnectedTo]="todoDoneList"
+    class="list"
+    (cdkDropListDropped)="dropTask($event)"
+  >
+    @for (task of tasks; track task) {
+    <div class="list-item" cdkDrag>
+      <div class="list-item-row">
+        {{ task.name }}
+        <button mat-icon-button (click)="removeTask(task)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+      <!-- TODO: Try converting this to an accordion expandable -->
+      <div class="list-item-row" style="font-size: 8px">
+        {{ task.details }}
+      </div>
+    </div>
+    }
+  </div>
+</div>
+
+<div class="container">
+  <h5>Done:</h5>
+  <div
+    cdkDropList
+    #todoDoneList="cdkDropList"
+    [cdkDropListData]="doneTasks"
+    [cdkDropListConnectedTo]="todoTaskList"
+    class="list"
+    (cdkDropListDropped)="dropTask($event)"
+  >
+    @for (doneTask of doneTasks; track doneTask) {
+    <div class="list-item" cdkDrag>
+      {{ doneTask.name }}
+      <button mat-icon-button (click)="removeDoneTask(doneTask)">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
+    }
+  </div>
+</div>

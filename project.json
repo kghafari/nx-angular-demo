@@ -10,9 +10,8 @@
     "build": {
       "executor": "@angular-devkit/build-angular:application",
       "outputs": ["{options.outputPath}"],
-      "baseHref": "/nx-angular-demo/browser/",
       "options": {
-        "outputPath": "dist/apps/nx-angular-demo",
+        "outputPath": "dist/nx-angular-demo",
         "index": "./src/index.html",
         "browser": "./src/main.ts",
         "polyfills": ["zone.js"],

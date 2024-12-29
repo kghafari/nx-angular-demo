@@ -12,7 +12,7 @@
       "outputs": ["{options.outputPath}"],
       "baseHref": "/nx-angular-demo/browser/",
       "options": {
-        "outputPath": "dist/nx-angular-demo",
+        "outputPath": "dist/apps/nx-angular-demo",
         "index": "./src/index.html",
         "browser": "./src/main.ts",
         "polyfills": ["zone.js"],

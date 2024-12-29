@@ -43,9 +43,9 @@ jobs:
       # Nx Affected runs only tasks affected by the changes in this PR/commit. Learn more: https://nx.dev/ci/features/affected
       # - run: npx nx affected -t lint test build
 
-      - name: Deploy to gh pages
-        run: |
-          npx angular-cli-ghpages --dir=dist/nx-angular-demo/browser --no-silent
-        env:
-          CI: true
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+      # - name: Deploy to gh pages
+      #   run: |
+      #     npx angular-cli-ghpages --dir=dist/nx-angular-demo --no-silent
+      #   env:
+      #     CI: true
+      #     GH_TOKEN: ${{ secrets.GH_TOKEN }}

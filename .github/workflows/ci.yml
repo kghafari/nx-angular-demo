@@ -6,9 +6,11 @@ on:
       - main
   pull_request:
 
+# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
-  actions: read
-  contents: read
+  contents: write
+  pages: write
+  id-token: write
 
 jobs:
   # Build job

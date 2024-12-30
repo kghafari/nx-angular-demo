@@ -1,35 +1,24 @@
-.title {
-  font-size: 24px;
-  font-weight: 500;
-  margin: 20px;
+.page-container {
+  margin-left: 20px;
+  margin-right: 20px;
 }
 
-.container {
-  //width: 400px;
-  max-width: 100%;
-  min-width: 25%;
-  margin: 0 20px;
+.form-field {
+  width: 100%;
+}
+
+.list-container {
   display: inline-block;
   vertical-align: top;
-}
-
-.add-container {
-  display: flex;
-  justify-content: space-between;
-  margin: 0 20px;
-  width: calc(100% - 40px);
-}
-
-.form-field-container {
-  display: flex;
+  width: calc(50% - 10px);
 }
 
 .list {
   border: solid 1px #ccc;
   min-height: 50px;
   border-radius: 4px;
-  // display: block;
   overflow: hidden;
+  justify-content: space-between;
 }
 
 .list-item {
@@ -41,14 +30,23 @@
   font-size: 14px;
 }
 
+.list-item:last-child {
+  border: none;
+}
+
 .list-item-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
-.list-item:last-child {
-  border: none;
+.list-item-detail {
+  font-size: 10px;
+}
+
+/* Applied to first list container */
+.mr-20 {
+  margin-right: 19px;
 }
 
 /* Highlight the list item that is being dragged. */
@@ -71,3 +69,9 @@
 .cdk-drag-placeholder {
   opacity: 0;
 }
+
+@media (max-width: 1114px) {
+    .list-container {
+      width: 100%;
+    }
+  }

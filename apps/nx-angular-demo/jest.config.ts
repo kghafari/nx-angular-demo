@@ -1,8 +1,8 @@
 export default {
   displayName: 'nx-angular-demo',
-  preset: './jest.preset.js',
+  preset: '../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
-  coverageDirectory: './coverage/nx-angular-demo',
+  coverageDirectory: '../../coverage/nx-angular-demo',
   transform: {
     '^.+\\.(ts|mjs|js|html)$': [
       'jest-preset-angular',

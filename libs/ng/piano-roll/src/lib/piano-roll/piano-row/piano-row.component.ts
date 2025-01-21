@@ -1,0 +1,37 @@
+import { ChangeDetectorRef, Component, EventEmitter, inject, Input, input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { AudioService } from '../../services/audio.service';
+import { RowNote } from '../../interfaces/row-note.interface';
+
+@Component({
+  selector: 'lib-piano-row',
+  imports: [CommonModule, MatIconModule, MatButtonModule],
+  standalone: true,
+  templateUrl: './piano-row.component.html',
+  styleUrl: './piano-row.component.scss',
+})
+export class PianoRowComponent {
+  // @Input({required: true}) rowItems!: number;
+  @Input({required: true}) notes!: RowNote[];
+  @Input({required: true}) speed!: number;
+
+  @Output() noteClicked = new EventEmitter<RowNote>();
+
+  private readonly audioService = inject(AudioService);
+  private readonly cdr = inject(ChangeDetectorRef);
+
+  protected audio = new Audio();
+  private intervalIds: any[] = [];
+
+  protected calculateNoteTiming(): number {
+    return this.speed * this.notes.length;
+  }
+
+  protected toggleActive(note: RowNote): void {
+    note.active = !note.active;
+    console.log('toggling note', note);
+    this.noteClicked.emit(note);
+  }
+}

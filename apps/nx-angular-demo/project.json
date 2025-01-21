@@ -21,6 +21,11 @@
           {
             "glob": "**/*",
             "input": "public"
+          },
+          {
+            "input": "libs/ng/piano-roll/assets",
+            "glob": "**.*",
+            "output": "assets"
           }
         ],
         "styles": ["apps/nx-angular-demo/src/styles.scss"],

@@ -14,7 +14,7 @@ import { RouterLinkWithHref, RouterOutlet } from '@angular/router';
 @Component({
   selector: 'app-navigation',
   templateUrl: './navigation.component.html',
-  styleUrl: './navigation.component.css',
+  styleUrl: './navigation.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   imports: [

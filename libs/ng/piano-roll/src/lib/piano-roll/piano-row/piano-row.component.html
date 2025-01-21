@@ -1,0 +1,11 @@
+<div class="note-container">
+  @for(note of notes; track note.id;) {
+  <button mat-icon-button (click)="toggleActive(note)">
+    <mat-icon>{{
+      note.active ? 'radio_button_checked' : 'radio_button_unchecked'
+    }}</mat-icon>
+  </button>
+  @if ((notes.indexOf(note) + 1) % 4 === 0) {
+  <div class="divider"></div>
+  } }
+</div>

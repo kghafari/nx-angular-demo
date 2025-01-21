@@ -13,21 +13,9 @@ import { RowNote } from '../../interfaces/row-note.interface';
   styleUrl: './piano-row.component.scss',
 })
 export class PianoRowComponent {
-  // @Input({required: true}) rowItems!: number;
   @Input({required: true}) notes!: RowNote[];
-  @Input({required: true}) speed!: number;
 
   @Output() noteClicked = new EventEmitter<RowNote>();
-
-  private readonly audioService = inject(AudioService);
-  private readonly cdr = inject(ChangeDetectorRef);
-
-  protected audio = new Audio();
-  private intervalIds: any[] = [];
-
-  protected calculateNoteTiming(): number {
-    return this.speed * this.notes.length;
-  }
 
   protected toggleActive(note: RowNote): void {
     note.active = !note.active;

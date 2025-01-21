@@ -1,7 +1,6 @@
 <mat-card style="width: 80%">
   <div>Debugging:</div>
   <div [@bounce]="bounceState">EEEE</div>
-  <div>{{ bpm }} BPM</div>
   <div>{{ doneCount }} Anims done</div>
   <div>{{ count }} count</div>
   <div>{{ notesPerRow * speed }} animation speed</div>
@@ -27,7 +26,7 @@
 </button>
 
 <mat-card style="width: fit-content">
-  <lib-piano-row [notes]="notes_1" [speed]="speed" (noteClicked)="noteClicked($event)"> </lib-piano-row>
+  <lib-piano-row [notes]="notes_1" (noteClicked)="noteClicked($event)"> </lib-piano-row>
   <div id="lil" class="track-bar" style="position: absolute"></div>
 </mat-card>
 <!-- <button mat-button (click)="toggle()">Toggle Open/Close</button> -->

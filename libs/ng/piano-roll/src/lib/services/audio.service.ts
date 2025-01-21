@@ -41,7 +41,6 @@ export class AudioService {
         const note = synth.triggerAttackRelease('C4', .05, Tone.now() + time / 1000);
         this.scheduledNotes.push(note);
       }
-      console.log(`note set at time ${time / 1000}, ${note.active ? 'active' : 'inactive'}`);
       time += duration;
     });
   }

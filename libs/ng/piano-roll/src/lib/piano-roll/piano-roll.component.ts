@@ -1,9 +1,9 @@
 import {
   AfterViewInit,
-  ChangeDetectorRef,
   Component,
   inject,
   OnChanges,
+  OnDestroy,
   OnInit,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -19,6 +19,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { PianoRowComponent } from './piano-row/piano-row.component';
 import { AudioService } from '../services/audio.service';
 import { RowNote } from '../interfaces/row-note.interface';
+import { NavigationStart, Router } from '@angular/router';
 
 @Component({
   selector: 'lib-piano-roll',
@@ -36,10 +37,12 @@ import { RowNote } from '../interfaces/row-note.interface';
 export class PianoRollComponent implements AfterViewInit, OnChanges, OnInit {
   private readonly animBuilder = inject(AnimationBuilder);
   private readonly audioService = inject(AudioService);
-  private readonly cdr = inject(ChangeDetectorRef);
+  private readonly router = inject(Router);
+  
+  protected debugMode = true;
 
   private anim: AnimationPlayer | null = null;
-  protected speed = 500; // 1 seconds
+  protected speed = 500;
   protected isSpeedChanged = false;
 
   // debugging
@@ -70,8 +73,10 @@ export class PianoRollComponent implements AfterViewInit, OnChanges, OnInit {
 
     this.anim = player;
 
-    // this.anim.play();
     this.anim.onDone(() => {
+      // if the router hasn't changed, schedule the notes
+      
+
       this.audioService.scheduleNotes(this.notes_1, this.speed);
       this.audioService.playNote();
       this.doneCount = this.doneCount + 1;
@@ -88,20 +93,17 @@ export class PianoRollComponent implements AfterViewInit, OnChanges, OnInit {
 
   public ngOnInit() {
     this.audioService.start();
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationStart) {
+        this.audioService.clearCurrentNotes();
+      }
+    });
   }
 
   public ngAfterViewInit() {
     this.animPlayer(document.querySelector("[id='lil']"));
     // this.anim?.play();
     this.fadeInStart = true;
-
-    setInterval(() => {
-      this.count = this.count + 10;
-      this.cdr.detectChanges();
-      if (this.count >= this.speed) {
-        this.count = 0;
-      }
-    }, 10);
   }
 
   protected speedUp() {

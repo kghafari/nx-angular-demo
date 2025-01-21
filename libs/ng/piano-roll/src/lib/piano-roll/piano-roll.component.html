@@ -1,14 +1,11 @@
-<mat-card style="width: 80%">
-  <div>Debugging:</div>
-  <div [@bounce]="bounceState">EEEE</div>
-  <div>{{ doneCount }} Anims done</div>
-  <div>{{ count }} count</div>
-  <div>{{ notesPerRow * speed }} animation speed</div>
-  <div>{{ (notesPerRow * speed) / notesPerRow }} note interval</div>
-</mat-card>
-<!-- <div [@run2]="run2done" (@run2.done)="run2Done()">aa</div> -->
+@if(debugMode) {
+  <mat-card style="width: 80%">
+    <div>Debugging:</div>
+    <div>{{ notesPerRow * speed }}ms - total animation speed</div>
+    <div>{{ (notesPerRow * speed) / notesPerRow }}ms - note interval</div>
+  </mat-card>
+}
 
-<button mat-button>Basic</button>
 <button mat-button (click)="start()">Start</button>
 <button mat-button (click)="pause()">Pause</button>
 

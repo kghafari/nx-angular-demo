@@ -19,7 +19,6 @@ export class PianoRowComponent {
 
   protected toggleActive(note: RowNote): void {
     note.active = !note.active;
-    console.log('toggling note', note);
     this.noteClicked.emit(note);
   }
 }

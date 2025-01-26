@@ -12,8 +12,8 @@ import { ReactivityComponent } from '@nx-angular-demo/reactivity';
 export class TestComponent implements AfterViewInit {
   @ViewChild(PianoRollComponent) pianoRollComponent!: PianoRollComponent;
 
-  protected showPianoRoll = false;
-  protected showReactivity = true;
+  protected showPianoRoll = true;
+  protected showReactivity = false;
 
   constructor(private cdr: ChangeDetectorRef) {}
 

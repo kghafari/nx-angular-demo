@@ -1,18 +1,33 @@
-
 <lib-sequencer></lib-sequencer>
-
 
 @if(debugMode) {
 <mat-card style="width: 80%">
   <div>Debugging:</div>
+  <div><button (click)="startAud()">startAud</button></div>
+  <div><button (click)="playPattern()">playPattern</button></div>
+
   <div>{{ notesPerRow * speed }}ms - total animation speed</div>
   <div>{{ (notesPerRow * speed) / notesPerRow }}ms - note interval</div>
   <!-- <div>{{ (interval$ | async) }}</div> -->
 </mat-card>
 }
 
+<mat-card style="width: 80%">
+  @for(note of pianoNotes_oct2; track note.id) {
+  <button
+    #noteBtn
+    [ngStyle]="{ 'opacity': note ? 1 : 0.5 }"
+    (click)="playNote(note.note)"
+    (keydown)="handleKeydown($event, note.note)"
+    (keyup)="handleKeyup($event)"
+  >
+    {{ note.id }} - {{ note.note }}
+  </button>
+  }
+</mat-card>
+
 <button mat-button (click)="start()">Start</button>
-<button mat-button (click)="pause()">Pause</button>
+<button mat-button (click)="stop()">Stop</button>
 
 <button mat-icon-button (click)="speedUp()">
   <mat-icon>arrow_upward</mat-icon>

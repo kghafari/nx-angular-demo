@@ -1,10 +1,13 @@
 import {
   AfterViewInit,
   Component,
+  ElementRef,
   inject,
   OnChanges,
   OnDestroy,
   OnInit,
+  QueryList,
+  ViewChildren,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
@@ -17,11 +20,12 @@ import {
 } from '@angular/animations';
 import { MatButtonModule } from '@angular/material/button';
 import { PianoRowComponent } from './piano-row/piano-row.component';
-import { AudioService } from '../services/audio.service';
+import { AudioService, NoteMeta } from '../services/audio.service';
 import { RowNote } from '../interfaces/row-note.interface';
 import { NavigationStart, Router } from '@angular/router';
 import { Observable, interval, map, tap, take } from 'rxjs';
-import { SequencerComponent } from "./sequencer/sequencer.component";
+import { SequencerComponent } from './sequencer/sequencer.component';
+import { Tone } from 'tone/build/esm/core/Tone';
 
 export const TICKSPEED = 500;
 
@@ -33,23 +37,38 @@ export const TICKSPEED = 500;
     MatButtonModule,
     MatCardModule,
     PianoRowComponent,
-    SequencerComponent
-],
+    SequencerComponent,
+  ],
   standalone: true,
   templateUrl: './piano-roll.component.html',
   styleUrl: './piano-roll.component.scss',
 })
-export class PianoRollComponent implements AfterViewInit, OnChanges, OnInit, OnDestroy {
+export class PianoRollComponent
+  implements AfterViewInit, OnChanges, OnInit, OnDestroy
+{
   private readonly animBuilder = inject(AnimationBuilder);
   private readonly audioService = inject(AudioService);
   private readonly router = inject(Router);
 
   protected debugMode = true;
-  
+
   private anim: AnimationPlayer | null = null;
   protected speed = 500;
   protected isSpeedChanged = false;
-  
+
+  @ViewChildren('noteBtn') noteButtons!: QueryList<
+    ElementRef<HTMLButtonElement>
+  >;
+
+  protected pianoNotes = this.audioService.generatePianoNotes();
+  protected pianoNotes_oct4 = this.getOctave(4);
+  protected pianoNotes_oct2 = this.getOctave(2);
+
+  protected keys = ['a', 's', 'd', 'f', 'g', 'h', 'j'];
+
+  private getOctave(octave: number): NoteMeta[] {
+    return this.pianoNotes.slice(octave * 7, octave * 7 + 7);
+  }
   //protected interval$ = this.createInterval(this.speed);
   // debugging
   protected count = 0;
@@ -66,7 +85,7 @@ export class PianoRollComponent implements AfterViewInit, OnChanges, OnInit, OnD
 
   private createInterval(tickSpeed: number): Observable<number> {
     return interval(tickSpeed).pipe(
-      map((value) => tickSpeed / 1000 + (tickSpeed * value) / 1000),
+      map((value) => tickSpeed / 1000 + (tickSpeed * value) / 1000)
     );
   }
 
@@ -88,20 +107,51 @@ export class PianoRollComponent implements AfterViewInit, OnChanges, OnInit, OnD
       // if the router hasn't changed, schedule the notes
 
       this.audioService.scheduleNotes(this.notes_1, this.speed);
-      this.audioService.playNote();
+      this.audioService.playPattern();
       this.doneCount = this.doneCount + 1;
       this.anim?.restart();
     });
   }
 
-  
-
   protected fadeInStart = false;
   protected bounceState = false;
 
   public ngOnChanges() {
+    console.log('onChanges');
   }
 
+  protected startAud() {
+    console.log('startAud');
+    // this.audioService.start();
+  }
+
+  protected playPattern() {
+    this.audioService.playPattern();
+  }
+
+  protected playNote(note: string) {
+    this.audioService.playNote(note);
+  }
+
+  protected handleKeydown(event: KeyboardEvent, note: string): void {
+    const keyIndex = this.keys.indexOf(event.key);
+    if (this.keys.includes(event.key)) {
+      const btn = this.noteButtons.toArray()[keyIndex].nativeElement;
+      btn.classList.add('active');
+      console.log('note', this.pianoNotes_oct2[this.keys.indexOf(event.key)].note);
+      this.audioService.playNote(
+        this.pianoNotes_oct2[this.keys.indexOf(event.key)].note
+      );
+    }
+  }
+
+  handleKeyup(event: KeyboardEvent): void {
+    const keyIndex = this.keys.indexOf(event.key);
+    if (keyIndex !== -1) {
+      const btn = this.noteButtons.toArray()[keyIndex].nativeElement;
+      btn.classList.remove('active');
+    }
+  }
   public ngOnDestroy() {
     // if (this.interval$) {
     //   this.interval$.subscribe().unsubscribe();
@@ -112,17 +162,11 @@ export class PianoRollComponent implements AfterViewInit, OnChanges, OnInit, OnD
 
     this.audioService.stop();
 
-
     console.log('onDestroy');
   }
 
   public ngOnInit() {
-    this.audioService.start();
-    this.router.events.subscribe((event) => {
-      if (event instanceof NavigationStart) {
-        this.audioService.clearCurrentNotes();
-      }
-    });
+    
   }
 
   public ngAfterViewInit() {
@@ -174,11 +218,10 @@ export class PianoRollComponent implements AfterViewInit, OnChanges, OnInit, OnD
     this.anim?.restart();
   }
 
-  pause() {
-    this.audioService.clearCurrentNotes();
+  stop() {
+    this.audioService.stop();
     this.anim?.pause();
   }
 
-  noteClicked(note: RowNote) {
-  }
+  noteClicked(note: RowNote) {}
 }

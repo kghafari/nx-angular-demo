@@ -1,4 +1,10 @@
-
-<lib-piano-roll>
-
-</lib-piano-roll>
+<button (click)="togglePianoRoll()">Sequencer</button>
+<button (click)="toggleReactivity()">Observable Stuff</button>
+@if(showPianoRoll) {
+    <lib-piano-roll>
+    </lib-piano-roll>
+}
+@if (showReactivity) {
+    <lib-reactivity>
+    </lib-reactivity>
+}

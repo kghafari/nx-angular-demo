@@ -1,0 +1,19 @@
+<p>Reactivity works!</p>
+<div>
+  Value: {{ intervalObservable$ | async }}
+</div>
+<div>
+  Value 2: {{ interval2$ | async }}
+</div>
+<div>
+  Value 3: {{ interval3$ | async }}
+</div>
+
+
+@if((characterState$ | async); as character){
+    <div>Name: {{ character.name }}</div>
+    <div>Hp: {{ character.hp }}</div>
+}
+<div></div>
+
+<lib-character></lib-character>

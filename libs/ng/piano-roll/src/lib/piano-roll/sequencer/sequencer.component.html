@@ -1,0 +1,13 @@
+<mat-card style="margin-bottom: 20px">
+  <div>
+    <p>sequencer works!</p>
+    @if( (interval$ | async); as interval ) {
+    <p>{{ interval }}</p>
+    } @else {
+    <p>Loading</p>
+    }
+  </div>
+  <button (click)="onClick()">subscribe</button>
+  <div style="background-color: aqua;" #animatedElement [@fadeInOut]="'visible'">Animated Element</div>
+
+</mat-card>

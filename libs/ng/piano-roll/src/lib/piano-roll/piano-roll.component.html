@@ -1,9 +1,14 @@
+
+<lib-sequencer></lib-sequencer>
+
+
 @if(debugMode) {
-  <mat-card style="width: 80%">
-    <div>Debugging:</div>
-    <div>{{ notesPerRow * speed }}ms - total animation speed</div>
-    <div>{{ (notesPerRow * speed) / notesPerRow }}ms - note interval</div>
-  </mat-card>
+<mat-card style="width: 80%">
+  <div>Debugging:</div>
+  <div>{{ notesPerRow * speed }}ms - total animation speed</div>
+  <div>{{ (notesPerRow * speed) / notesPerRow }}ms - note interval</div>
+  <!-- <div>{{ (interval$ | async) }}</div> -->
+</mat-card>
 }
 
 <button mat-button (click)="start()">Start</button>
@@ -23,7 +28,8 @@
 </button>
 
 <mat-card style="width: fit-content">
-  <lib-piano-row [notes]="notes_1" (noteClicked)="noteClicked($event)"> </lib-piano-row>
+  <lib-piano-row [notes]="notes_1" (noteClicked)="noteClicked($event)">
+  </lib-piano-row>
   <div id="lil" class="track-bar" style="position: absolute"></div>
 </mat-card>
 <!-- <button mat-button (click)="toggle()">Toggle Open/Close</button> -->

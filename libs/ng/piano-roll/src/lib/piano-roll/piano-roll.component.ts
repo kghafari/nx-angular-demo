@@ -20,6 +20,10 @@ import { PianoRowComponent } from './piano-row/piano-row.component';
 import { AudioService } from '../services/audio.service';
 import { RowNote } from '../interfaces/row-note.interface';
 import { NavigationStart, Router } from '@angular/router';
+import { Observable, interval, map, tap, take } from 'rxjs';
+import { SequencerComponent } from "./sequencer/sequencer.component";
+
+export const TICKSPEED = 500;
 
 @Component({
   selector: 'lib-piano-roll',
@@ -29,22 +33,24 @@ import { NavigationStart, Router } from '@angular/router';
     MatButtonModule,
     MatCardModule,
     PianoRowComponent,
-  ],
+    SequencerComponent
+],
   standalone: true,
   templateUrl: './piano-roll.component.html',
   styleUrl: './piano-roll.component.scss',
 })
-export class PianoRollComponent implements AfterViewInit, OnChanges, OnInit {
+export class PianoRollComponent implements AfterViewInit, OnChanges, OnInit, OnDestroy {
   private readonly animBuilder = inject(AnimationBuilder);
   private readonly audioService = inject(AudioService);
   private readonly router = inject(Router);
-  
-  protected debugMode = true;
 
+  protected debugMode = true;
+  
   private anim: AnimationPlayer | null = null;
   protected speed = 500;
   protected isSpeedChanged = false;
-
+  
+  //protected interval$ = this.createInterval(this.speed);
   // debugging
   protected count = 0;
   protected doneCount = 1;
@@ -58,9 +64,14 @@ export class PianoRollComponent implements AfterViewInit, OnChanges, OnInit {
     { id: '4', duration: 1, active: true },
   ];
 
+  private createInterval(tickSpeed: number): Observable<number> {
+    return interval(tickSpeed).pipe(
+      map((value) => tickSpeed / 1000 + (tickSpeed * value) / 1000),
+    );
+  }
+
   protected animPlayer(element: HTMLElement | null): void {
     const noteTiming = this.notesPerRow * this.speed;
-    // console.log('noteTiming', noteTiming);
     const slide = this.animBuilder.build([
       style({ left: '0px' }),
       animate(noteTiming, style({ left: '100%' })),
@@ -75,7 +86,6 @@ export class PianoRollComponent implements AfterViewInit, OnChanges, OnInit {
 
     this.anim.onDone(() => {
       // if the router hasn't changed, schedule the notes
-      
 
       this.audioService.scheduleNotes(this.notes_1, this.speed);
       this.audioService.playNote();
@@ -84,11 +94,26 @@ export class PianoRollComponent implements AfterViewInit, OnChanges, OnInit {
     });
   }
 
+  
+
   protected fadeInStart = false;
   protected bounceState = false;
 
   public ngOnChanges() {
-    console.log('onChanges');
+  }
+
+  public ngOnDestroy() {
+    // if (this.interval$) {
+    //   this.interval$.subscribe().unsubscribe();
+    // }
+    if (this.anim) {
+      this.anim.destroy();
+    }
+
+    this.audioService.stop();
+
+
+    console.log('onDestroy');
   }
 
   public ngOnInit() {
@@ -109,6 +134,7 @@ export class PianoRollComponent implements AfterViewInit, OnChanges, OnInit {
   protected speedUp() {
     this.audioService.clearCurrentNotes();
     this.anim?.restart();
+    // this.interval$ = this.createInterval(this.speed / 2);
     this.speed = this.speed / 2;
     this.animPlayer(document.querySelector("[id='lil']"));
   }
@@ -116,6 +142,7 @@ export class PianoRollComponent implements AfterViewInit, OnChanges, OnInit {
   protected speedDown() {
     this.audioService.clearCurrentNotes();
     this.anim?.restart();
+    // this.interval$ = this.createInterval(this.speed * 2);
     this.speed = this.speed * 2;
     this.animPlayer(document.querySelector("[id='lil']"));
   }
@@ -123,7 +150,11 @@ export class PianoRollComponent implements AfterViewInit, OnChanges, OnInit {
   protected addNotes() {
     this.notesPerRow = this.notesPerRow + 4;
     for (let i = this.notes_1.length; i < this.notesPerRow; i++) {
-      this.notes_1.push({ id: `${this.notes_1.length + i}`, duration: 1, active: false });
+      this.notes_1.push({
+        id: `${this.notes_1.length + i}`,
+        duration: 1,
+        active: false,
+      });
     }
     this.anim?.restart();
     this.audioService.clearCurrentNotes();
@@ -149,6 +180,5 @@ export class PianoRollComponent implements AfterViewInit, OnChanges, OnInit {
   }
 
   noteClicked(note: RowNote) {
-    console.log('note clicked', note);
   }
 }

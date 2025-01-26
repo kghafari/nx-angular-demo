@@ -15,7 +15,8 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@nx-angular-demo/piano-roll": ["libs/ng/piano-roll/src/index.ts"]
+      "@nx-angular-demo/piano-roll": ["libs/ng/piano-roll/src/index.ts"],
+      "@nx-angular-demo/reactivity": ["libs/ng/reactivity/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

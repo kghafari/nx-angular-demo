@@ -98,6 +98,7 @@ export class AudioService {
     this.scheduledNotes = [];
   }
 
+  // We're scheduling these notes too far ahead of time. We need to schedule them closer to the time they should be played.
   public scheduleNotes(notes: RowNote[], duration: number): void {
     if (myConfig.audio.mute) {
       return;
@@ -125,7 +126,8 @@ export class AudioService {
   public stop(): void {
 
     console.log('stop');
-    // Tone.getTransport().pause();
+    this.clearCurrentNotes();
+    Tone.getTransport().pause();
     Tone.getTransport().cancel();
   }
 }

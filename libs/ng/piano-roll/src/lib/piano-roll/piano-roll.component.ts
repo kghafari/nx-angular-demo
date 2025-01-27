@@ -25,7 +25,8 @@ import { RowNote } from '../interfaces/row-note.interface';
 import { NavigationStart, Router } from '@angular/router';
 import { Observable, interval, map, tap, take } from 'rxjs';
 import { SequencerComponent } from './sequencer/sequencer.component';
-import { Tone } from 'tone/build/esm/core/Tone';
+import * as Tone from 'tone';
+
 
 export const TICKSPEED = 500;
 
@@ -107,9 +108,12 @@ export class PianoRollComponent
       // if the router hasn't changed, schedule the notes
 
       this.audioService.scheduleNotes(this.notes_1, this.speed);
-      this.audioService.playPattern();
+      // this.audioService.playPattern();
       this.doneCount = this.doneCount + 1;
-      this.anim?.restart();
+
+      if(this.anim) {
+        this.anim.restart();
+      }
     });
   }
 
@@ -156,11 +160,14 @@ export class PianoRollComponent
     // if (this.interval$) {
     //   this.interval$.subscribe().unsubscribe();
     // }
+    // 
+    Tone.getTransport().cancel()
+    this.audioService.stop();
     if (this.anim) {
+      this.anim.pause();
       this.anim.destroy();
     }
 
-    this.audioService.stop();
 
     console.log('onDestroy');
   }
@@ -170,7 +177,7 @@ export class PianoRollComponent
   }
 
   public ngAfterViewInit() {
-    this.animPlayer(document.querySelector("[id='lil']"));
+    // this.animPlayer(document.querySelector("[id='lil']"));
     // this.anim?.play();
     this.fadeInStart = true;
   }
@@ -215,11 +222,13 @@ export class PianoRollComponent
 
   start() {
     this.audioService.scheduleNotes(this.notes_1, this.speed);
+    this.animPlayer(document.querySelector("[id='lil']"));    
     this.anim?.restart();
   }
 
   stop() {
-    this.audioService.stop();
+    // this.audioService.stop();
+    Tone.getTransport().cancel();
     this.anim?.pause();
   }
 

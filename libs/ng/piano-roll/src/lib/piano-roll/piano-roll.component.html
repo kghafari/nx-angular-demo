@@ -1,5 +1,6 @@
 <lib-sequencer></lib-sequencer>
-
+<button mat-button (click)="start()">Start (CLICK FIRST)</button>
+<button mat-button (click)="stop()">Stop</button>
 @if(debugMode) {
 <mat-card style="width: 80%">
   <div>Debugging:</div>
@@ -26,8 +27,7 @@
   }
 </mat-card>
 
-<button mat-button (click)="start()">Start</button>
-<button mat-button (click)="stop()">Stop</button>
+
 
 <button mat-icon-button (click)="speedUp()">
   <mat-icon>arrow_upward</mat-icon>

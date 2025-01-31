@@ -2,10 +2,7 @@ import { Injectable } from '@angular/core';
 import * as Tone from 'tone';
 import { RowNote } from '../interfaces/row-note.interface';
 import { Synth, SynthOptions } from 'tone';
-import { config, Observable } from 'rxjs';
 import { myConfig } from '../config';
-import { Note } from 'tone/build/esm/core/type/NoteUnits';
-import { PatternGenerator } from 'tone/build/esm/event/PatternGenerator';
 
 // export interface Note {
 //   id: string;
@@ -62,6 +59,7 @@ export class AudioService {
   public playNote(note: string): void {
     const s = new Tone.Synth().toDestination();
     //const s = new Tone.MembraneSynth().toDestination();
+    console.log(`play note: ${note}`);
     s.triggerAttackRelease(note, '4n', Tone.now(), 2);
   }
 
@@ -124,7 +122,6 @@ export class AudioService {
   }
 
   public stop(): void {
-
     console.log('stop');
     this.clearCurrentNotes();
     Tone.getTransport().pause();

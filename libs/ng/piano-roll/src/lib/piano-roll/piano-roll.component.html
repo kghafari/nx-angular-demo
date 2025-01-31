@@ -14,6 +14,20 @@
 }
 
 <mat-card style="width: 80%">
+  @for(note of pianoNotes_oct4; track note.id) {
+  <button
+    #noteBtn
+    [ngStyle]="{ 'opacity': note ? 1 : 0.5 }"
+    (click)="playNote(note.note)"
+    (keydown)="handleKeydown($event, note.note)"
+    (keyup)="handleKeyup($event)"
+  >
+    {{ note.id }} - {{ note.note }}
+  </button>
+  }
+</mat-card>
+
+<mat-card style="width: 80%">
   @for(note of pianoNotes_oct2; track note.id) {
   <button
     #noteBtn

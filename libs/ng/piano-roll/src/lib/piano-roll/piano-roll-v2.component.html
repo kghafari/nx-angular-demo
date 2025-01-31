@@ -1,0 +1,15 @@
+<lib-sequencer></lib-sequencer>
+<button mat-button (click)="start()">Start (CLICK FIRST)</button>
+<button mat-button (click)="stop()">Stop</button>
+
+<mat-card style="width: 80%; display: inline-block" >
+  @let keyEvent = keyEvent$ | async;
+  @for(keyNote of keyNoteMap; track keyNote) {
+  <button 
+  [ngStyle]="{ 'opacity': keyNote?.key === keyEvent?.keyCode ? 1 : 0.5 }"
+  (click)="playNote(keyNote.note)">
+    {{ keyNote.note }}
+  </button>
+  }
+</mat-card>
+<!-- <button mat-button (click)="toggle()">Toggle Open/Close</button> -->

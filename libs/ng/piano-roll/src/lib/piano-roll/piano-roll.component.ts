@@ -26,6 +26,7 @@ import { NavigationStart, Router } from '@angular/router';
 import { Observable, interval, map, tap, take } from 'rxjs';
 import { SequencerComponent } from './sequencer/sequencer.component';
 import * as Tone from 'tone';
+import { InputService } from '../services/input.service';
 
 
 export const TICKSPEED = 500;
@@ -50,9 +51,12 @@ export class PianoRollComponent
   private readonly animBuilder = inject(AnimationBuilder);
   private readonly audioService = inject(AudioService);
   private readonly router = inject(Router);
+  private readonly inputService = inject(InputService);
 
   protected debugMode = true;
 
+  protected keyDown$ = this.inputService.keyDown$;
+  protected keyUp$ = this.inputService.keyUp$;
   private anim: AnimationPlayer | null = null;
   protected speed = 500;
   protected isSpeedChanged = false;
@@ -90,6 +94,29 @@ export class PianoRollComponent
     );
   }
 
+
+  public ngOnInit() {
+
+    // this.inputService.isPressed$.subscribe((isPressed) => {
+    //   console.log('isPressed', isPressed);
+    // });
+
+    this.inputService.keyEvent$.subscribe((event) => {
+      console.log('keyEvent', event);
+      if (event?.type === 'keydown') {
+        this.audioService.playNote('C4');
+      } 
+      // if (event?.type === 'keyup') {
+      //   this.audioService.playNote('F4');
+      // }
+    });
+  }
+
+  public ngAfterViewInit() {
+    // this.animPlayer(document.querySelector("[id='lil']"));
+    // this.anim?.play();
+  }
+
   protected animPlayer(element: HTMLElement | null): void {
     const noteTiming = this.notesPerRow * this.speed;
     const slide = this.animBuilder.build([
@@ -116,9 +143,6 @@ export class PianoRollComponent
       }
     });
   }
-
-  protected fadeInStart = false;
-  protected bounceState = false;
 
   public ngOnChanges() {
     console.log('onChanges');
@@ -172,15 +196,7 @@ export class PianoRollComponent
     console.log('onDestroy');
   }
 
-  public ngOnInit() {
-    
-  }
-
-  public ngAfterViewInit() {
-    // this.animPlayer(document.querySelector("[id='lil']"));
-    // this.anim?.play();
-    this.fadeInStart = true;
-  }
+ 
 
   protected speedUp() {
     this.audioService.clearCurrentNotes();

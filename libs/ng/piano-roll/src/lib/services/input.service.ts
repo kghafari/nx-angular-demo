@@ -7,10 +7,33 @@ import {
   Observable,
 } from 'rxjs';
 
+export interface NoteMap {
+  keyCode: string;
+  note: string;
+  accidental?: string;
+  octave?: number;
+}
+
 @Injectable({
   providedIn: 'root',
 })
 export class InputService {
+
+  public NoteMap: NoteMap[] = [
+        { keyCode: 'KeyA', note: 'C', accidental:'' },
+        { keyCode: 'KeyW', note: 'C', accidental:'#' },
+        { keyCode: 'KeyS', note: 'D', accidental:'' },
+        { keyCode: 'KeyE', note: 'E', accidental:'b' },
+        { keyCode: 'KeyD', note: 'E', accidental:'' },
+        { keyCode: 'KeyF', note: 'F', accidental:'' },
+        { keyCode: 'KeyT', note: 'F', accidental:'#' },
+        { keyCode: 'KeyG', note: 'G', accidental:'' },
+        { keyCode: 'KeyY', note: 'A', accidental:'b' },
+        { keyCode: 'KeyH', note: 'A', accidental:'' },
+        { keyCode: 'KeyU', note: 'B', accidental:'b' },
+        { keyCode: 'KeyJ', note: 'B', accidental:'' },
+      ]
+
   public keyDown$: Observable<KeyboardEvent> = new Observable();
   public keyUp$: Observable<KeyboardEvent> = new Observable();
 

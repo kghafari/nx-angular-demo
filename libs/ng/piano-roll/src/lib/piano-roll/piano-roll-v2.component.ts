@@ -46,6 +46,8 @@ export class PianoRollV2Component implements OnInit, OnDestroy {
   protected pianoNotes_oct4 = this.getOctave(4);
   protected pianoNotes_oct2 = this.getOctave(2);
 
+
+  protected noteMap = this.inputService.NoteMap;
   protected keyEvent$ = this.inputService.keyEvent$;
 
   private getOctave(octave: number): NoteMeta[] {
@@ -54,36 +56,17 @@ export class PianoRollV2Component implements OnInit, OnDestroy {
 
   public ngOnInit() {
     this.keyEvent$.subscribe((event) => {
-      console.log('keyEvent', event);
-      this.handleKey(event);
+      this.handleKey(event, 4);
     });
-    console.log(this.pianoNotes_oct4);
   }
 
-  protected keys = [
-    'KeyA',
-    'KeyS',
-    'KeyD',
-    'KeyF',
-    'KeyG',
-    'KeyH',
-    'KeyJ',
-    'KeyK',
-  ];
+  protected handleKey(event: KeyboardEvent | undefined, octave: number) {
 
-  protected keyNoteMap: KeyNoteMap[] = this.keys.map((key, index) => ({
-    key: key,
-    note: this.pianoNotes_oct4[index].note,
-  }));
-
-  protected a = [this.keys, this.pianoNotes_oct4];
-
-  protected handleKey(event: KeyboardEvent | undefined) {
-    for (let i = 0; i < this.keys.length; i++) {
-      if (event && event.code === this.keys[i] && event.type === 'keydown') {
-        this.audioService.playNote(this.pianoNotes_oct4[i].note);
+    this.noteMap.forEach(noteMap => {
+      if(event?.code === noteMap.keyCode && event.type === 'keydown') {
+        this.audioService.playNote(`${noteMap.note}${noteMap.accidental}${octave}`);
       }
-    }
+    });
   }
 
   protected startAud() {

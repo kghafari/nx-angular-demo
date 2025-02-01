@@ -60,7 +60,14 @@ export class AudioService {
     const s = new Tone.Synth().toDestination();
     //const s = new Tone.MembraneSynth().toDestination();
     console.log(`play note: ${note}`);
-    s.triggerAttackRelease(note, '4n', Tone.now(), 2);
+    s.envelope.attack = 1.50;
+    s.envelope.decay = 0.50;
+    s.envelope.sustain = 1.00;
+    s.envelope.release = 5.00;
+
+    s.oscillator.type = 'sine';
+    s.portamento = 0.05;
+    s.triggerAttackRelease(note, '4n', Tone.now());
   }
 
   public playPattern(): void {    

@@ -4,23 +4,6 @@ import { RowNote } from '../interfaces/row-note.interface';
 import { Synth, SynthOptions } from 'tone';
 import { myConfig } from '../config';
 
-// export interface Note {
-//   id: string;
-//   duration: number;
-//   tone: string;
-//   active: boolean;
-//   time: number;
-// }
-
-// export interface Row {
-//   name: string;
-//   notes: Note[];
-// }
-
-// export interface Track {
-//   rows: Row[];
-// }
-
 export interface NoteMeta {
   note: string;
   id: string;
@@ -41,7 +24,7 @@ export class AudioService {
     Tone.getTransport().start();
   }
 
-  private letters = ['C', 'D', 'E', 'F', 'G', 'A', 'B', ];
+  private letters = ['C', 'D', 'E', 'F', 'G', 'A', 'B'];
   private octaves = [0, 1, 2, 3, 4, 5, 6, 7, 8];
 
   public generatePianoNotes(): NoteMeta[] {
@@ -55,22 +38,39 @@ export class AudioService {
 
     return notes;
   }
-  
-  public playNote(note: string): void {
-    const s = new Tone.Synth().toDestination();
+
+  public playNote(note: string, options?: Partial<SynthOptions>): void {
+    if (options) {
+      this.updateOptions(options);
+    }
+    const s = new Tone.Synth({ ...options }).toDestination();
+   
     //const s = new Tone.MembraneSynth().toDestination();
-    console.log(`play note: ${note}`);
-    s.envelope.attack = 1.50;
-    s.envelope.decay = 0.50;
-    s.envelope.sustain = 1.00;
-    s.envelope.release = 5.00;
+    console.log(`play note: ${note}, options: ${options}`);
 
     s.oscillator.type = 'sine';
     s.portamento = 0.05;
     s.triggerAttackRelease(note, '4n', Tone.now());
   }
 
-  public playPattern(): void {    
+  public updateOptions(options: Partial<SynthOptions>): Partial<SynthOptions> {
+    const synthOptions: Partial<SynthOptions> = {
+      ...options,
+      envelope: {
+        attack: options.envelope?.attack ?? 0.1,
+        decay: options.envelope?.decay ?? 0.1,
+        sustain: options.envelope?.sustain ?? 0.1,
+        release: options.envelope?.release ?? 0.1,
+        attackCurve: 'linear',
+        releaseCurve: 'linear',
+        decayCurve: 'linear',
+      },
+    };
+
+    return synthOptions;
+  }
+
+  public playPattern(): void {
     // seems like it's better to have the synth and kick as class properties so we have a single instance of each
     // const synth = new Tone.Synth().toDestination();
     // const kick = new Tone.MembraneSynth().toDestination();
@@ -83,12 +83,11 @@ export class AudioService {
       'random'
     );
 
-
     const kickPattern = new Tone.Pattern(
       (time, note) => {
         this.kick.triggerAttackRelease(note, 10, time);
       },
-      ['C1', '0', 'C3', '0'],
+      ['C1', '0', 'C3', '0']
     );
 
     pattern.interval = '4n';

@@ -4,15 +4,18 @@
 @let keyEvent = keyEvent$ | async;
 
 <mat-card style="width: 80%; display: inline-block">
-  <div style="margin-left: 8px">
+  <div class="top-keys" style="margin-left: 30px">
     @for(key of noteMap; track key) { @if(key.accidental) {
     <span
       [ngStyle]="{
-        'margin-left': key.note === 'F' ? '10px' : '0px'
+        'margin-left': key.note === 'F' ? '60px' : '0px'
       }"
     >
       <button
-        [ngStyle]="{ opacity: key.keyCode === keyEvent?.code ? 1 : 0.5 }"
+        class="key"
+        [ngClass]="{
+          'key-pressed': key.keyCode === keyEvent?.code ? true : false
+        }"
         (click)="playNote(key.note)"
       >
         {{ key.note }}{{ key.accidental }}
@@ -24,7 +27,10 @@
   <div>
     @for(key of noteMap; track key) { @if(!key.accidental) {
     <button
-      [ngStyle]="{ opacity: key.keyCode === keyEvent?.code ? 1 : 0.5 }"
+      class="key"
+      [ngClass]="{
+        'key-pressed': key.keyCode === keyEvent?.code ? true : false
+      }"
       (click)="playNote(key.note)"
     >
       {{ key.note }}
@@ -32,4 +38,55 @@
     } }
   </div>
 </mat-card>
+
+<mat-card style="width: 80%; display: inline-block; margin-top: 15px">
+  <mat-form-field>
+    <mat-label>Attack</mat-label>
+    <input
+      matInput
+      type="number"
+      min="0"
+      max="2"
+      [(ngModel)]="asdr.envelope.attack"
+      (ngModelChange)="updateEnvelope()"
+    />
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Decay</mat-label>
+    <input
+      matInput
+      type="number"
+      min="0"
+      max="2"
+      [(ngModel)]="asdr.envelope.decay"
+      (ngModelChange)="updateEnvelope()"
+    />
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Sustain</mat-label>
+    <input
+      matInput
+      type="number"
+      min="0"
+      max="2"
+      [(ngModel)]="asdr.envelope.sustain"
+      (ngModelChange)="updateEnvelope()"
+    />
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Release</mat-label>
+    <input
+      matInput
+      type="number"
+      min="0"
+      max="2"
+      [(ngModel)]="asdr.envelope.release"
+      (ngModelChange)="updateEnvelope()"
+    />
+  </mat-form-field>
+</mat-card>
+
 <!-- <button mat-button (click)="toggle()">Toggle Open/Close</button> -->

@@ -23,7 +23,7 @@ import { PianoRowComponent } from './piano-row/piano-row.component';
 import { AudioService, NoteMeta } from '../services/audio.service';
 import { RowNote } from '../interfaces/row-note.interface';
 import { NavigationStart, Router } from '@angular/router';
-import { Observable, interval, map, tap, take } from 'rxjs';
+import { Observable, interval, map, tap, take, repeat } from 'rxjs';
 import { SequencerComponent } from './sequencer/sequencer.component';
 import * as Tone from 'tone';
 import { InputService } from '../services/input.service';
@@ -53,7 +53,10 @@ export class PianoRollComponent
   private readonly router = inject(Router);
   private readonly inputService = inject(InputService);
 
+  
+
   protected debugMode = true;
+
 
   protected keyDown$ = this.inputService.keyDown$;
   protected keyUp$ = this.inputService.keyUp$;
@@ -249,4 +252,86 @@ export class PianoRollComponent
   }
 
   noteClicked(note: RowNote) {}
+
+  // play a bunch of random notes
+  // protected interval1$ = interval(1000).pipe(
+  //   tap((value) => {
+  //     this.audioService.playNote("C4");
+  //   }),
+  //   repeat()
+  // ).subscribe();
+
+  // protected interval2$ = interval(1200).pipe(
+  //   tap((value) => {
+  //     this.audioService.playNote("E4");
+  //   }),
+  //   repeat()
+  // ).subscribe();
+
+  // protected interval32$ = interval(1300).pipe(
+  //   tap((value) => {
+  //     this.audioService.playNote("F4");
+  //   }),
+  //   repeat()
+  // ).subscribe();
+
+  // protected interval3$ = interval(1400).pipe(
+  //   tap((value) => {
+  //     this.audioService.playNote("C3");
+  //   }),
+  //   repeat()
+  // ).subscribe();
+
+  // protected interval5$ = interval(1500).pipe(
+  //   tap((value) => {
+  //     this.audioService.playNote("E3");
+  //   }),
+  //   repeat()
+  // ).subscribe();
+
+  // protected interval13$ = interval(1600).pipe(
+  //   tap((value) => {
+  //     this.audioService.playNote("F3");
+  //   }),
+  //   repeat()
+  // ).subscribe();
+
+  // protected interval153$ = interval(1700).pipe(
+  //   tap((value) => {
+  //     this.audioService.playNote("F3");
+  //   }),
+  //   repeat()
+  // ).subscribe();
+
+  // protected interval1533$ = interval(1800).pipe(
+  //   tap((value) => {
+  //     this.audioService.playNote("F3");
+  //   }),
+  //   repeat()
+  // ).subscribe();
+  // protected interval1543$ = interval(1000).pipe(
+  //   tap((value) => {
+  //     this.audioService.playNote("F3");
+  //   }),
+  //   repeat()
+  // ).subscribe();
+  // protected interval1513$ = interval(1000).pipe(
+  //   tap((value) => {
+  //     this.audioService.playNote("F3");
+  //   }),
+  //   repeat()
+  // ).subscribe();
+  // protected interval1153$ = interval(1000).pipe(
+  //   tap((value) => {
+  //     this.audioService.playNote("F3");
+  //   }),
+  //   repeat()
+  // ).subscribe();
+
+  // protected interval15$ = interval(1000).pipe(
+  //   tap((value) => {
+  //     this.audioService.playNote("E4");
+  //   }),
+  //   repeat()
+  // ).subscribe();
 }

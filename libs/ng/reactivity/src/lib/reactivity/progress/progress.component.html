@@ -1,0 +1,40 @@
+<mat-card class="example-card">
+<button (click)="startTimer('default', 5000)">Start Default Timer</button>
+<button (click)="startTimer('secondary', 3000)">Start Secondary Timer</button>
+<mat-card class="example-card">
+  <div> {{ (( runTime$ | async) ?? 0)}} </div> 
+  <mat-card-content>
+
+    <input
+      type="range"
+      min="0"
+      max="10000"
+      step="1"
+      [(ngModel)]="timerDurationMs"
+      class="example-margin"
+    />
+    <input
+      type="checkbox"
+      min="0"
+      max="10000"
+      step="1"
+      [(ngModel)]="auto"
+      class="example-margin"
+    />
+    <h2 class="example-h2">Result</h2>
+
+    <section class="example-section">
+      <mat-progress-bar
+        (click)="clickTimer()"
+        class="example-margin"
+        [mode]="mode"
+        [value]="(simpleTimer$ | async)?.progress"
+        [bufferValue]="bufferValue"
+      >
+      </mat-progress-bar>
+      <div class="remaining-time">
+        Remaining: {{(simpleTimer$ | async)?.remaining}} ms
+      </div>
+    </section>
+  </mat-card-content>
+</mat-card>

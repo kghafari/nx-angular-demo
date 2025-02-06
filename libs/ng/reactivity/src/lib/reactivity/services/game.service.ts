@@ -125,6 +125,6 @@ export class GameService {
 
   private enemyAttack(): void {
     this.heroService.takeDamage(10); // Enemies deal 10 damage to the hero
-    console.log('Enemies attacked the hero!');
+    // console.log('Enemies attacked the hero!');
   }
 }

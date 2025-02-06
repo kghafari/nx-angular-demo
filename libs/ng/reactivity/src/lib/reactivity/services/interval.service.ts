@@ -1,14 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, interval, map, switchMap, tap } from 'rxjs';
-
-export interface CharacterState {
-  hp: number;
-  damage: number;
-  accuracy: number;
-  defense: number;
-  critChance: number;
-  critDamage: number;
-}
+import { Observable, interval, map } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -16,10 +7,6 @@ export interface CharacterState {
 export class IntervalService {
   private readonly TICKSPEED = 1000;
   private interval$: Observable<number> = this.createIntervalObservable();
-
-  // constructor() {
-  //   this.interval$ = this.createIntervalObservable();
-  // }
 
   private getRandomInterval(): number {
     return Math.floor(Math.random() * (1000)); // Random interval between 5-10 seconds

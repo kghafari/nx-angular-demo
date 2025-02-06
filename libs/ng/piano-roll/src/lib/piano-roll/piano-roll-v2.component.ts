@@ -1,9 +1,11 @@
 import {
   Component,
   ElementRef,
+  EventEmitter,
   inject,
   OnDestroy,
   OnInit,
+  Output,
   QueryList,
   ViewChildren,
 } from '@angular/core';
@@ -19,6 +21,7 @@ import { InputService } from '../services/input.service';
 import { FormsModule } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
+import { MatSliderModule } from '@angular/material/slider';
 
 export interface KeyNoteMap {
   key: string;
@@ -36,6 +39,7 @@ export interface KeyNoteMap {
     MatFormFieldModule,
     MatSelectModule,
     MatInputModule,
+    MatSliderModule,
   ],
   standalone: true,
   templateUrl: './piano-roll-v2.component.html',
@@ -44,6 +48,7 @@ export interface KeyNoteMap {
 export class PianoRollV2Component implements OnInit, OnDestroy {
   private readonly audioService = inject(AudioService);
   private readonly inputService = inject(InputService);
+  @Output() noteEvent = new EventEmitter<string>();
 
   @ViewChildren('noteBtn') noteButtons!: QueryList<
     ElementRef<HTMLButtonElement>
@@ -53,7 +58,6 @@ export class PianoRollV2Component implements OnInit, OnDestroy {
   protected pianoNotes_oct4 = this.getOctave(4);
   protected pianoNotes_oct2 = this.getOctave(2);
 
-
   protected noteMap = this.inputService.NoteMap;
   protected keyEvent$ = this.inputService.keyEvent$;
 
@@ -62,9 +66,9 @@ export class PianoRollV2Component implements OnInit, OnDestroy {
       attack: 0.1,
       decay: 0.1,
       sustain: 0.1,
-      release: 0.1
-    }
-  }
+      release: 0.1,
+    },
+  };
 
   protected synthOptions: Partial<Tone.SynthOptions> = {
     oscillator: {
@@ -72,7 +76,9 @@ export class PianoRollV2Component implements OnInit, OnDestroy {
       volume: 0,
       phase: 0,
       mute: false,
-      onstop: () => {console.log('stop')},
+      onstop: () => {
+        console.log('stop');
+      },
     },
     envelope: {
       attack: this.asdr.envelope.attack ?? 0.1,
@@ -83,8 +89,7 @@ export class PianoRollV2Component implements OnInit, OnDestroy {
       releaseCurve: 'linear',
       decayCurve: 'linear',
     },
-  }
-
+  };
 
   private getOctave(octave: number): NoteMeta[] {
     return this.pianoNotes.slice(octave * 8, octave * 8 + 8);
@@ -97,9 +102,13 @@ export class PianoRollV2Component implements OnInit, OnDestroy {
   }
 
   protected handleKey(event: KeyboardEvent | undefined, octave: number) {
-    this.noteMap.forEach(noteMap => {
-      if(event?.code === noteMap.keyCode && event.type === 'keydown') {
-        this.audioService.playNote(`${noteMap.note}${noteMap.accidental}${octave}`, this.synthOptions);
+    this.noteMap.forEach((noteMap) => {
+      if (event?.code === noteMap.keyCode && event.type === 'keydown') {
+        this.noteEvent.emit(`${noteMap.note}${noteMap.accidental}${octave}`);
+        this.audioService.playNote(
+          `${noteMap.note}${noteMap.accidental}${octave}`,
+          this.synthOptions
+        );
       }
     });
   }
@@ -113,7 +122,6 @@ export class PianoRollV2Component implements OnInit, OnDestroy {
       this.synthOptions.envelope.sustain = this.asdr.envelope.sustain;
       this.synthOptions.envelope.release = this.asdr.envelope.release;
     }
-
 
     this.audioService.updateOptions(this.synthOptions);
   }

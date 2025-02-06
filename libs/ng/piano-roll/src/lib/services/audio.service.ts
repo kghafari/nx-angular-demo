@@ -43,19 +43,20 @@ export class AudioService {
     if (options) {
       this.updateOptions(options);
     }
-    const s = new Tone.Synth({ ...options }).toDestination();
+    const s = new Tone.MembraneSynth({ ...options }).toDestination();
    
     //const s = new Tone.MembraneSynth().toDestination();
     console.log(`play note: ${note}, options: ${options}`);
 
-    s.oscillator.type = 'sine';
-    s.portamento = 0.05;
+    // s.oscillator.type = 'sine';
+    //s.portamento = 0.05;
     s.triggerAttackRelease(note, '4n', Tone.now());
   }
 
   public updateOptions(options: Partial<SynthOptions>): Partial<SynthOptions> {
     const synthOptions: Partial<SynthOptions> = {
       ...options,
+    
       envelope: {
         attack: options.envelope?.attack ?? 0.1,
         decay: options.envelope?.decay ?? 0.1,

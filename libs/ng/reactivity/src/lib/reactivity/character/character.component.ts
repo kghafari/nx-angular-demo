@@ -16,6 +16,7 @@ export class CharacterComponent implements OnInit {
   private readonly gameService = inject(GameService); 
 
   protected hero$ = this.heroService.hero$;
+  protected elapsedSeconds$ = this.gameService.elapsedSeconds$;
 
   takeDamage(): void {
     this.heroService.takeDamage(10);
@@ -37,20 +38,7 @@ export class CharacterComponent implements OnInit {
     this.gameService.startGameTimer();
   }
 
-
   public restartGame(): void {
     this.gameService.restartGame();
-  }
-
-  public onClick(): void {
-    // this.characterState$.pipe(
-    //   take(1),
-    //   map((state) => {
-    //     const newState = { 
-    //       ...state, 
-    //       hp: state.hp - 10 };
-    //     this.characterService.updateCharacterState(newState);
-    //   })
-    // ).subscribe();
   }
 }

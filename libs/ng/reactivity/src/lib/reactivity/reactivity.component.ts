@@ -14,10 +14,11 @@ import { IntervalService } from './services/interval.service';
 import { OrderType } from './models/enums';
 import { CharacterComponent } from "./character/character.component";
 import { CharacterService } from './services/character.service';
+import { ProgressComponent } from "./progress/progress.component";
 
 @Component({
   selector: 'lib-reactivity',
-  imports: [CommonModule, CharacterComponent],
+  imports: [CommonModule, CharacterComponent, ProgressComponent],
   templateUrl: './reactivity.component.html',
   styleUrls: ['./reactivity.component.scss'],
   standalone: true,
@@ -34,6 +35,7 @@ export class ReactivityComponent implements OnInit {
   protected intervalObservable$ = this.intervalService
     .getIntervalObservable()
     .pipe(takeUntil(this.destroy$));
+    
   protected interval2$: Observable<number> = this.createInterval(
     this.tickSpeed
   );

@@ -3,15 +3,11 @@
 @if((hero$ | async); as hero){
 <div>
   <h2>HS{{ hero.name }}</h2>
+  <div>Elapsed Time: {{this.elapsedSeconds$ | async}}</div>
   <p>Health: {{ hero.health }}</p>
   <p>Mana: {{ hero.mana }}</p>
   <button (click)="takeDamage()">Take Damage</button>
 </div>
 }
-<!-- @if (characterState$ | async as character) {
 
-} -->
-
-<!-- <div> C: {{ characterState$ | async as character}}</div> -->
 <button (click)="restartGame()">Restart</button>
-<button (click)="onClick()">Click me</button>

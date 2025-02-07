@@ -1,13 +1,12 @@
 import { Component, AfterViewInit, ChangeDetectorRef, ViewChild } from '@angular/core';
-import { PianoRollComponent, PianoRollV2Component } from '@nx-angular-demo/piano-roll';
-import { ReactivityComponent } from '@nx-angular-demo/reactivity';
+import { PianoRollComponent } from '@nx-angular-demo/piano-roll';
 
 @Component({
   selector: 'app-test',
   templateUrl: './test.component.html',
   styleUrl: './test.component.scss',
   standalone: true,
-  imports: [PianoRollComponent, PianoRollV2Component, ReactivityComponent],
+  imports: [PianoRollComponent],
 })
 export class TestComponent implements AfterViewInit {
   @ViewChild(PianoRollComponent) pianoRollComponent!: PianoRollComponent;

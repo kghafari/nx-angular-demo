@@ -16,6 +16,7 @@
     "baseUrl": ".",
     "paths": {
       "@nx-angular-demo/piano-roll": ["libs/ng/piano-roll/src/index.ts"],
+      "@nx-angular-demo/pipes": ["libs/ng/pipes/src/index.ts"],
       "@nx-angular-demo/reactivity": ["libs/ng/reactivity/src/index.ts"]
     }
   },

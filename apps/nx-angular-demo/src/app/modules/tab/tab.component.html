@@ -1,0 +1,41 @@
+<mat-card>
+  <mat-tab-group headerPosition="below" class="child-tab">
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon class="example-tab-icon">sign_language</mat-icon>
+      </ng-template>
+      <div class="child-tab-body">
+        <div>Production {{ (resources$ | async)?.production | number }}</div>
+        <div>Culture {{ (resources$ | async)?.culture | number }}</div>
+        <div>military {{ (resources$ | async)?.military | number }}</div>
+        <div>science {{ (resources$ | async)?.science | number }}</div>
+        <div>faith {{ (resources$ | async)?.faith | number }}</div>
+        <mat-card>
+            <mat-card-content>
+                <div>Remaining Time: {{ ((remainingTime$ | async) ?? 0) | minutesSeconds }}s</div>
+                <div>Run Duration: {{((elapsedTime$ | async) ?? 0) | minutesSeconds}}</div>
+            </mat-card-content>
+        </mat-card>
+      </div>
+    </mat-tab>
+
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon class="example-tab-icon">spa</mat-icon>
+      </ng-template>
+      <div class="child-tab-body">
+        <lib-piano-roll-v2></lib-piano-roll-v2>
+      </div>
+    </mat-tab>
+
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon class="example-tab-icon">school</mat-icon>
+      </ng-template>
+
+      <div class="child-tab-body">
+        <div>Time Remaining:</div>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+</mat-card>

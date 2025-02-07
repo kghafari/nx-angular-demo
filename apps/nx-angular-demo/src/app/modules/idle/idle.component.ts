@@ -4,10 +4,11 @@ import { GameStateService } from './services/game-state.service';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
+import { TabComponent } from "../tab/tab.component";
 
 @Component({
   selector: 'app-idle',
-  imports: [CommonModule, MatTabsModule, MatCardModule, MatIconModule],
+  imports: [CommonModule, MatTabsModule, MatCardModule, MatIconModule, TabComponent],
   templateUrl: './idle.component.html',
   styleUrl: './idle.component.scss',
 })

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, interval } from 'rxjs';
+import { BehaviorSubject, interval, map } from 'rxjs';
 import { Resources } from '../models/idle.interfaces';
 
 type ResourceType = 'production' | 'science' | 'faith' | 'military' | 'culture';
@@ -9,7 +9,7 @@ type ResourceType = 'production' | 'science' | 'faith' | 'military' | 'culture';
 })
 export class GameStateService {
   private tickRate = 1000; // 1 second per tick
-  private runDuration = 300; // 300 seconds (5 min runs)
+  private runDuration = 300000; // 30000ms (5 min runs)
   private elapsedTime = new BehaviorSubject<number>(0);
   private resources = new BehaviorSubject<Resources>({
     production: 0,
@@ -28,6 +28,7 @@ export class GameStateService {
   };
 
   public elapsedTime$ = this.elapsedTime.asObservable();
+  public remainingTime$ = this.elapsedTime$.pipe(map((time) => this.runDuration - time));
   public resources$ = this.resources.asObservable();
 
   constructor() {
@@ -36,7 +37,10 @@ export class GameStateService {
   }
 
   private gameTick() {
-    let time = this.elapsedTime.value + 1;
+    // elapsed time: 0, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000
+    // tickspeed(1000) 
+    const time = this.tickRate + (this.elapsedTime.value);
+    console.log('Tick:', time);
     this.elapsedTime.next(time);
 
     if (time >= this.runDuration) {
@@ -47,7 +51,7 @@ export class GameStateService {
   }
 
   private generateResources() {
-    let updatedResources = { ...this.resources.value };
+    const updatedResources = { ...this.resources.value };
   
     updatedResources.production += 1 * this.upgradeMultipliers.production;
     updatedResources.science += 0.5 * this.upgradeMultipliers.science;

@@ -5,29 +5,23 @@
         <mat-icon class="example-tab-icon">sign_language</mat-icon>
       </ng-template>
       <div class="child-tab-body">
-        <div>Production {{ (resources$ | async)?.production | number : '1.2-2'}}</div>
-        <div>Culture {{ (resources$ | async)?.culture | number : '1.2-2' }}</div>
-        <div>military {{ (resources$ | async)?.military | number : '1.2-2'}}</div>
-        <div>science {{ (resources$ | async)?.science | number : '1.2-2' }}</div>
-        <div>faith {{ (resources$ | async)?.faith | number : '1.2-2' }}</div>
-
-        @for (key of (normalizedResources$ | async) | keyvalue; track key) {
+        @for (resource of (resources$ | async); track resource.id) {
         <div style="margin-bottom: 5px; position: relative;">
           <mat-progress-bar
-            (click)="updateResourceMult(key.key, 2)"
+            (click)="updateResourceMult(resource, 2)"
             class="example-margin"
             mode="determinate"
-            [value]="key.value"
+            [value]="(normalizedResources$ | async)?.[resource.id]?.value"
           >
           </mat-progress-bar>
-          <div class="progress-text" style=" z-index: 100;">{{key.key}}</div>
+          <div class="progress-text" style=" z-index: 100;">{{resource.label}} | {{resource.value}} | {{resource.multiplier}}x</div>
         </div>
         }
         <mat-card>
           <mat-card-content>
             <div>
               Remaining Time:
-              {{ (remainingTime$ | async) ?? 0 | minutesSeconds }}s
+              {{ (remainingTime$ | async) ?? 0 | minutesSeconds }}
             </div>
             <div>
               Run Duration: {{ (elapsedTime$ | async) ?? 0 | minutesSeconds }}

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, interval, map } from 'rxjs';
-import { Resources, ResourceType } from '../models/idle.interfaces';
+import { Resource, ResourceType, startingResources } from '../models/idle.interfaces';
 
 
 @Injectable({
@@ -10,21 +10,7 @@ export class GameStateService {
   private tickRate = 100; // .1 second per tick
   private runDuration = 300000; // 30000ms (5 min runs)
   private elapsedTime = new BehaviorSubject<number>(0);
-  private resources = new BehaviorSubject<Resources>({
-    production: 0,
-    science: 0,
-    faith: 0,
-    military: 0,
-    culture: 0,
-  });
-
-  private upgradeMultipliers = {
-    production: 1,
-    science: 1,
-    faith: 1,
-    military: 1,
-    culture: 1,
-  };
+  private resources = new BehaviorSubject<Resource[]>(startingResources);
 
   public elapsedTime$ = this.elapsedTime.asObservable();
   public remainingTime$ = this.elapsedTime$.pipe(
@@ -49,19 +35,19 @@ export class GameStateService {
   }
 
   private generateResources() {
-    const updatedResources = { ...this.resources.value };
-
-    updatedResources.production += 1 * this.upgradeMultipliers.production;
-    updatedResources.science += 0.5 * this.upgradeMultipliers.science;
-    updatedResources.faith += 0.3 * this.upgradeMultipliers.faith;
-    updatedResources.military += 0.2 * this.upgradeMultipliers.military;
-    updatedResources.culture += 0.4 * this.upgradeMultipliers.culture;
-
+    const updatedResources = [...this.resources.value];
+    for(let i = 0; i < updatedResources.length; i++) {
+      updatedResources[i].value = updatedResources[i].value * updatedResources[i].multiplier;
+    }
     this.resources.next(updatedResources);
   }
 
-  public applyUpgrade(resource: ResourceType, multiplier: number) {
-    this.upgradeMultipliers[resource] *= multiplier;
+  public applyUpgrade(resource: Resource, multiplier: number) {
+    const updatedResources = [...this.resources.value];
+    const index = updatedResources.findIndex(r => r.key === resource.key);
+
+    updatedResources[index].multiplier = updatedResources[index].multiplier += multiplier;
+    this.resources.next(updatedResources);
   }
 
   private endRun() {
@@ -73,26 +59,19 @@ export class GameStateService {
   }
 
   private resetResources() {
-    this.resources.next({
-      production: 0,
-      science: 0,
-      faith: 0,
-      military: 0,
-      culture: 0,
-    });
+    this.resources.next(startingResources);
   }
 
   private prestige() {
     // when the game ends, we want to take 5% of the resource multiplier and start the game with that as the base mutliplier
     
     const prestigeMultiplier = 0.05;
+    const updatedResources = [...this.resources.value];
+    for(let i = 0; i < updatedResources.length; i++) {
+      updatedResources[i].multiplier = updatedResources[i].multiplier * (1 + prestigeMultiplier);
+    }
+    this.resources.next(updatedResources);
 
-    this.upgradeMultipliers.production *= 1 + prestigeMultiplier;
-    this.upgradeMultipliers.science *= 1 + prestigeMultiplier;
-    this.upgradeMultipliers.faith *= 1 + prestigeMultiplier;
-    this.upgradeMultipliers.military *= 1 + prestigeMultiplier;
-    this.upgradeMultipliers.culture *= 1 + prestigeMultiplier;
-
-    console.log('Prestige applied!. New multipliers:', this.upgradeMultipliers);
+    console.log('Prestige applied!. New multipliers:', updatedResources);
   }
 }

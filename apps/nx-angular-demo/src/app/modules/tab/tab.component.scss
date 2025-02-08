@@ -1,9 +1,21 @@
 .child-tab {
-    height: calc(100vh - 48px);
+  height: calc(100vh - 48px);
 }
 
 .child-tab-body {
-    height: 100vh;
-    margin-top: 48px;
-    margin-left: 24px;
+  height: 100vh;
+  margin-top: 48px;
+  margin-left: 24px;
+}
+
+.progress-text {
+  position: absolute;
+  top: 50%;
+  color: gray;
+  transform: translate(8px, -50%);
+}
+
+:host {
+  --mdc-linear-progress-track-height: 25px;
+  --mdc-linear-progress-active-indicator-height: 25px;
 }

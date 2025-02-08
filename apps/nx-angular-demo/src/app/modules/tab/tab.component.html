@@ -5,16 +5,34 @@
         <mat-icon class="example-tab-icon">sign_language</mat-icon>
       </ng-template>
       <div class="child-tab-body">
-        <div>Production {{ (resources$ | async)?.production | number }}</div>
-        <div>Culture {{ (resources$ | async)?.culture | number }}</div>
-        <div>military {{ (resources$ | async)?.military | number }}</div>
-        <div>science {{ (resources$ | async)?.science | number }}</div>
-        <div>faith {{ (resources$ | async)?.faith | number }}</div>
+        <div>Production {{ (resources$ | async)?.production | number : '1.2-2'}}</div>
+        <div>Culture {{ (resources$ | async)?.culture | number : '1.2-2' }}</div>
+        <div>military {{ (resources$ | async)?.military | number : '1.2-2'}}</div>
+        <div>science {{ (resources$ | async)?.science | number : '1.2-2' }}</div>
+        <div>faith {{ (resources$ | async)?.faith | number : '1.2-2' }}</div>
+
+        @for (key of (normalizedResources$ | async) | keyvalue; track key) {
+        <div style="margin-bottom: 5px; position: relative;">
+          <mat-progress-bar
+            (click)="updateResourceMult(key.key, 2)"
+            class="example-margin"
+            mode="determinate"
+            [value]="key.value"
+          >
+          </mat-progress-bar>
+          <div class="progress-text" style=" z-index: 100;">{{key.key}}</div>
+        </div>
+        }
         <mat-card>
-            <mat-card-content>
-                <div>Remaining Time: {{ ((remainingTime$ | async) ?? 0) | minutesSeconds }}s</div>
-                <div>Run Duration: {{((elapsedTime$ | async) ?? 0) | minutesSeconds}}</div>
-            </mat-card-content>
+          <mat-card-content>
+            <div>
+              Remaining Time:
+              {{ (remainingTime$ | async) ?? 0 | minutesSeconds }}s
+            </div>
+            <div>
+              Run Duration: {{ (elapsedTime$ | async) ?? 0 | minutesSeconds }}
+            </div>
+          </mat-card-content>
         </mat-card>
       </div>
     </mat-tab>

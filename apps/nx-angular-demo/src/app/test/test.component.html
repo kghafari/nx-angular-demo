@@ -6,9 +6,15 @@
 @if (showReactivity) {
 
 } -->
+<div>
+  <h3>API Data</h3>
+  <pre>{{ (data$ | async)| json }}</pre>
+</div>
 
-<lib-piano-roll>
-</lib-piano-roll>
+<h1>Test Message</h1>
+<p>{{ (testMessage$|async) }}</p>
+
+<lib-piano-roll> </lib-piano-roll>
 
 <!-- <lib-reactivity></lib-reactivity> -->
 

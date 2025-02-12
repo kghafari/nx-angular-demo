@@ -25,7 +25,7 @@ jobs:
       - name: Npm install
         run: npm ci --legacy-peer-deps
       - name: Build Angular
-        run: npx nx run angular-app:build --configuration production --base-href /${{ github.event.repository.name }}/
+        run: npx nx run nx-angular-demo:build --configuration production --base-href /${{ github.event.repository.name }}/
       - name: Build Nest
         run: npx nx run nx-nest-demo:build --configuration production
       - name: Generate 404 files

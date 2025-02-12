@@ -24,8 +24,10 @@ jobs:
         uses: actions/configure-pages@v5
       - name: Npm install
         run: npm ci --legacy-peer-deps
-      - name: Build
-        run: npx nx run-many --target=build --all --skip-nx-cache --configuration production --base-href /${{ github.event.repository.name }}/
+      - name: Build Angular
+        run: npx nx run angular-app:build --configuration production --base-href /${{ github.event.repository.name }}/
+      - name: Build Nest
+        run: npx nx run nx-nest-demo:build --configuration production
       - name: Generate 404 files
         run: |
             cp "./dist/nx-angular-demo/browser/index.html" "./dist/nx-angular-demo/browser/404.html"

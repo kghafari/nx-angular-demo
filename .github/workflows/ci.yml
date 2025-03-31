@@ -63,7 +63,7 @@ jobs:
       - name: install playwright
         run: npx playwright install --with-deps
       - name: Run Playwright tests
-        run: npx playwright test
+        run: npx nx run nx-angular-demo:e2e
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}

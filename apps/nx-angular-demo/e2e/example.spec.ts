@@ -2,7 +2,7 @@
 import { test, expect } from '@playwright/test';
 
 test('should actually test something', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('nx-angular-demo/');
   const tasks = page.getByRole('link', { name: 'Tasks' })
   await tasks.click();
 
@@ -18,7 +18,7 @@ test('should actually test something', async ({ page }) => {
 });
 
 test("should fail", async ({ page }) => {
-  await expect(page).not.toHaveTitle(/Playwright/);
+  await expect(page).toHaveTitle(/Playwright/);
 });
 
 test("should be flaky", async ({ page }) => {

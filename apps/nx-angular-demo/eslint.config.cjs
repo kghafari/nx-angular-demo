@@ -1,7 +1,10 @@
+const playwright = require('eslint-plugin-playwright');
 const baseConfig = require('../../eslint.config.cjs');
 const nx = require('@nx/eslint-plugin');
 
 module.exports = [
+  playwright.configs['flat/recommended'],
+
   ...baseConfig,
   {
     ignores: ['**/dist'],
@@ -43,6 +46,11 @@ module.exports = [
   },
   {
     files: ['**/*.html'],
+    // Override or add rules here
+    rules: {},
+  },
+  {
+    files: ['**/*.ts', '**/*.js'],
     // Override or add rules here
     rules: {},
   },

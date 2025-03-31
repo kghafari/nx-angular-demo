@@ -62,8 +62,8 @@ jobs:
         run: npm ci --legacy-peer-deps
       - name: install playwright
         run: npx playwright install --with-deps
-      - name: Run e2e tests
-        run: npx nx run nx-angular-demo:e2e
+      - name: Run Playwright tests
+        run: npx playwright test
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
